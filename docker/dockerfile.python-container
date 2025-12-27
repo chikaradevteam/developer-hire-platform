@@ -1,0 +1,22 @@
+FROM lscr.io/linuxserver/code-server:latest
+
+
+RUN apt-get update && \
+    apt-get install -y \
+        python3 \
+        python3-pip \
+        python3-venv \
+        curl \
+        ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+
+RUN python -m pip install --upgrade pip
+
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN python --version && pip --version && uv --version
