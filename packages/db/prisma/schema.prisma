@@ -63,6 +63,9 @@ model User {
   interviewer   Interviewer?
   candidate     Candidate?
   taggedPeoples TaggedPeople[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Skill {
@@ -70,6 +73,9 @@ model Skill {
   name   String
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Interviewer {
@@ -85,6 +91,9 @@ model Interviewer {
   jobPostings        JobPosting[]
   interviewInvites   InterviewInvite[]
   interviews         Interview[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Candidate {
@@ -103,6 +112,9 @@ model Candidate {
   projectPosts             ProjectPost[]
   interviewWishlistMembers InterviewWishlistMembers[]
   jobApplications          JobApplication[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model InPlatformMessage {
@@ -112,6 +124,9 @@ model InPlatformMessage {
 
   sentBy String?      @db.ObjectId
   sender Interviewer? @relation(fields: [sentBy], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model InterviewWishlist {
@@ -120,6 +135,9 @@ model InterviewWishlist {
   createdBy                String                     @db.ObjectId
   creator                  Interviewer                @relation(fields: [createdBy], references: [id])
   interviewWishlistMembers InterviewWishlistMembers[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model InterviewWishlistMembers {
@@ -130,6 +148,9 @@ model InterviewWishlistMembers {
   projectPost         ProjectPost       @relation(fields: [projecPostId], references: [id])
   interviewWishListId String            @db.ObjectId
   interviewerWishList InterviewWishlist @relation(fields: [interviewWishListId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model JobPosting {
@@ -139,6 +160,9 @@ model JobPosting {
   createdBy       String           @db.ObjectId
   creator         Interviewer      @relation(fields: [createdBy], references: [id])
   jobApplications JobApplication[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model InterviewInvite {
@@ -148,6 +172,9 @@ model InterviewInvite {
   interviewer   Interviewer @relation(fields: [interviewerId], references: [id])
   sentTo        String      @db.ObjectId
   candidate     Candidate   @relation(fields: [sentTo], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Interview {
@@ -160,6 +187,9 @@ model Interview {
   attemptedBy        String          @db.ObjectId
   candidate          Candidate       @relation(fields: [attemptedBy], references: [id])
   interviewChats     InterviewChat[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Experience {
@@ -173,6 +203,9 @@ model Experience {
   contribution String
   status       JOB_STATUS @default(ONGOING)
   jobType      JOB_TYPE   @default(ONSITE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProjectPost {
@@ -184,6 +217,9 @@ model ProjectPost {
   interviewWishlistMembers InterviewWishlistMembers[]
   taggedPeoples            TaggedPeople[]
   attachments              Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model JobApplication {
@@ -194,6 +230,9 @@ model JobApplication {
   jobPostingId JobPosting        @relation(fields: [jobId], references: [id])
   extraRemarks String
   status       APPLICATIONSTATUS @default(APPLIED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model InterviewChat {
@@ -202,6 +241,9 @@ model InterviewChat {
   sentBy      String    @db.ObjectId
   interviewId String    @db.ObjectId
   interview   Interview @relation(fields: [interviewId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TaggedPeople {
@@ -210,6 +252,9 @@ model TaggedPeople {
   user         User        @relation(fields: [userId], references: [id])
   belongToPost String      @db.ObjectId
   post         ProjectPost @relation(fields: [belongToPost], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Attachment {
@@ -219,4 +264,7 @@ model Attachment {
   type         FILE_TYPE   @default(IMG)
   belongToPost String      @db.ObjectId
   post         ProjectPost @relation(fields: [belongToPost], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
