@@ -1,0 +1,16 @@
+FROM lscr.io/linuxserver/code-server:latest
+
+# Install Node.js LTS (20.x)
+RUN apt-get update && \
+    apt-get install -y curl ca-certificates && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Optional: verify installs
+RUN node --version && npm --version
+RUN npm i -g bun 
+RUN npm i -g pnpm 
+RUN npm i -g yarn
+RUN bun --version && pnpm --version && yarn --version
