@@ -2,7 +2,7 @@ import type { Request,Response } from "express";
 import apiResponse from "../utils/apiResponse";
 import prismaClient from "../utils/prisma";
 
-class SkillMessager {
+class SkillController {
     async addSkills(req:Request,res:Response){
         try {
             if(!req.user) throw new Error("User Not Authenticated");
@@ -11,6 +11,15 @@ class SkillMessager {
 
             if(!skillName) throw new Error("Skill Name is Required");
 
+            const existingSkill = await prismaClient.skill.findFirst({
+                where:{
+                    name:skillName,
+                    userId,
+                },
+            });
+
+            if(existingSkill) throw new Error("Skill already Added");
+
             const createdSkill = await prismaClient.skill.create({
                 data:{
                     name : skillName,
@@ -18,15 +27,13 @@ class SkillMessager {
                 },
             });
 
-            if(!createdSkill) throw new Error("Skill Creation Failed");
-
             return res
-            .status(200)
-            .json(apiResponse(200,"Skill Added SuccessFully",createdSkill));
+            .status(201)
+            .json(apiResponse(201,"Skill Added SuccessFully",createdSkill));
         } catch (error:any) {
             console.log("Error in Adding Skill : ",error);
             return res
-            .status(200)
+            .status(500)
             .json(apiResponse(500,error.message,null));
         }
     }
@@ -36,9 +43,9 @@ class SkillMessager {
             if(!req.user) throw new Error("User not Authenticated");
 
             const userId = req.user.id;
-            const { skillId,newValue } = req.body;
+            const { skillId,name } = req.body;
 
-            if(!skillId || !newValue){
+            if(!skillId || !name){
                 throw new Error("Skill ID and New Value are Required");
             }
 
@@ -56,7 +63,7 @@ class SkillMessager {
                     id : skillId,
                 },
                 data : {
-                    name : newValue,
+                    name : name,
                 },
             });
 
@@ -66,7 +73,7 @@ class SkillMessager {
         } catch (error:any) {
             console.log("Error in Updating Skill : ",error);
             return res
-            .status(200)
+            .status(500)
             .json(apiResponse(500,error.message,null));
         }
     }
@@ -101,10 +108,10 @@ class SkillMessager {
         } catch (error:any) {
             console.log("Error in Removing Skill : ",error);
             return res
-            .status(200)
+            .status(500)
             .json(apiResponse(500,error.message,null));
         }
     }
 }
 
-export default new SkillMessager();
+export default new SkillController();
